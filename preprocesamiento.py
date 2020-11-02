@@ -3,8 +3,8 @@ import os
 
 # Generate arrays 
 # read the train ids
-male = []
-female = []
+datos = []
+edades=[]
 with open('input/boneage-training-dataset.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
@@ -14,21 +14,18 @@ with open('input/boneage-training-dataset.csv') as csv_file:
             line_count += 1
         else:
             row[1]= int(row[1])
-            if(row[2] == "True"):
-                male.append(row[:2])
-            else:
-                female.append(row[:2])
+            datos.append(row[:2])
+            edades.append(row[1])
             line_count += 1
             
     print(f'Processed {line_count} lines.')
-    
 
-print(f'Male: {len(male)}')
-print(f'Female: {len(female)}')
+print(f"Largo de data {len(datos)}")
+
 
 
 # create directories
-directories=['./train','./train/male','./train/female','./test','./test/male','./test/female']
+directories=['./train','./test']
 for dirName in directories:
     try:
         # Create target Directory
@@ -37,48 +34,43 @@ for dirName in directories:
     except FileExistsError:
         print("Directory " , dirName ,  " already exists")
 
-for label in range(1, 229):
+
+
+train=datos[:10000]
+test=datos[10000:]
+trainEdades=edades[:10000]
+testEdades=edades[10000:]
+
+
+for label in list(set(trainEdades)):
     try:
         # Create target Directory
-        os.mkdir('./train/male/'+str(label))
-        os.mkdir('./train/female/'+str(label))
-        os.mkdir('./test/male/'+str(label))
-        os.mkdir('./test/female/'+str(label))
+        os.mkdir('./train/'+str(label))
+    except FileExistsError:
+        print("Directory already exists")
+        break
+
+for label in list(set(testEdades)):
+    try:
+        # Create target Directory
+        os.mkdir('./test/'+str(label))
     except FileExistsError:
         print("Directory already exists")
         break
 
 
 
-trainMale=male[:4622]
-testMale=male[4622:]
-
-trainFemale=female[:4622]
-testFemale=female[4622:]
-
 
 from shutil import copyfile
 # Se copian las imagenes
-for i in trainMale:
+for i in train:
     src="./input/boneage-training-dataset/boneage-training-dataset/"+str(i[0])+".png"
-    dst="./train/male/"+str(i[1])+"/"+str(i[0])+".png"
+    dst="./train/"+str(i[1])+"/"+str(i[0])+".png"
     copyfile(src, dst)
-print('TrainMale terminado...')
+print('Train terminado...')
 
-for i in testMale:
+for i in test:
     src="./input/boneage-training-dataset/boneage-training-dataset/"+str(i[0])+".png"
-    dst="./test/male/"+str(i[1])+"/"+str(i[0])+".png"
+    dst="./test/"+str(i[1])+"/"+str(i[0])+".png"
     copyfile(src, dst)
 print('TestMale terminado...')
-
-for i in trainFemale:
-    src="./input/boneage-training-dataset/boneage-training-dataset/"+str(i[0])+".png"
-    dst="./train/female/"+str(i[1])+"/"+str(i[0])+".png"
-    copyfile(src, dst)
-print('TrainFemale terminado...')
-
-for i in testFemale:
-    src="./input/boneage-training-dataset/boneage-training-dataset/"+str(i[0])+".png"
-    dst="./test/female/"+str(i[1])+"/"+str(i[0])+".png"
-    copyfile(src, dst)
-print('TestFemale terminado...')
