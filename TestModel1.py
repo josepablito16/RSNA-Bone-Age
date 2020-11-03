@@ -43,33 +43,60 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 testX,testY = next(test_datagen.flow_from_directory(
         "./test",
         target_size=(150, 150),
-        batch_size=20,
+        batch_size=2611,
+        #batch_size=4,
         class_mode='sparse'))
 
 predY=model.predict(testX, batch_size = 32, verbose = True)
 
-fig, ax1 = plt.subplots(1,1, figsize = (6,6))
-ax1.plot(predY, 'r.', label = 'predictions')
-ax1.plot(testY, 'b.', label = 'real')
-ax1.legend()
-ax1.set_xlabel('Actual Age (Months)')
-ax1.set_ylabel('Predicted Age (Months)')
+import plotly.graph_objects as go
 
+X = np.arange(len(testY))
+prediccionY=[]
+for i in predY:
+  prediccionY.append(i[0])
+
+error=0
+for i in range(len(testY)):
+  error+=abs(predY[i][0]-testY[i])
+
+print(f"MAE = {error/len(testY)}")
+
+
+fig = go.Figure(data=[
+    go.Bar(name='Edad real', x=X, y=testY),
+    go.Bar(name='Edad predicción', x=X, y=prediccionY)
+])
+# Change the bar mode
+fig.update_layout(barmode='group')
+fig.update_xaxes(type='category')
+fig.update_layout(
+    title="30 resultados random del modelo 1.2",
+    xaxis_title="# de tests",
+    yaxis_title="Edad",
+    legend_title="Leyenda",
+
+)
+fig.show()
+'''
+
+data = [[30, 25, 50, 20],
+[40, 23, 51, 17],
+[35, 22, 45, 19]]
+X = np.arange(len(testY))
+fig = plt.figure()
+ax = fig.add_axes([0,0,1,1])
+ax.bar(X + 0.00, testY, color = 'b', width = 0.25, label = 'real')
+ax.bar(X + 0.25, prediccionY, color = 'g', width = 0.25,label = 'predictions')
+ax.legend()
+ax.set_xlabel('Number of test')
+ax.set_ylabel('Age (Months)')
 plt.show()
-
-
 '''
-path = "./test/12/14546.png"
-img = image.load_img(path, target_size=(150, 150))
-x = image.img_to_array(img)
-x = np.expand_dims(x, axis=0)
 
-images = np.vstack([x])
-classes = model.predict(images, batch_size=10)
-print(path)
-clasesNp=np.array(classes)
-print(clasesNp)
-'''
+
+
+
 
 
 

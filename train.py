@@ -5,6 +5,12 @@ from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.inception_v3 import InceptionV3
 
+'''
+wget --no-check-certificate \
+    https://storage.googleapis.com/mledu-datasets/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5 \
+    -O /tmp/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5
+'''
+
 local_weights_file = '/tmp/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
 pre_trained_model = InceptionV3(input_shape = (150, 150, 3), 
@@ -77,7 +83,7 @@ history = model.fit(
       verbose=2,
       callbacks=[callback])
 
-model.save_weights("TrainModel1")
+model.save_weights("TrainModel2")
 
 import matplotlib.pyplot as plt
 acc = history.history['mae']

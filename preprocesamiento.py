@@ -45,7 +45,8 @@ testEdades=edades[10000:]
 for label in list(set(trainEdades)):
     try:
         # Create target Directory
-        os.mkdir('./train/'+str(label))
+        os.mkdir('./train/'+str(int(label)/228))
+        #os.mkdir('./train/'+str(int(label)))
     except FileExistsError:
         print("Directory already exists")
         break
@@ -53,7 +54,8 @@ for label in list(set(trainEdades)):
 for label in list(set(testEdades)):
     try:
         # Create target Directory
-        os.mkdir('./test/'+str(label))
+        os.mkdir('./test/'+str(int(label)/228))
+        #os.mkdir('./test/'+str(int(label)))
     except FileExistsError:
         print("Directory already exists")
         break
@@ -65,12 +67,14 @@ from shutil import copyfile
 # Se copian las imagenes
 for i in train:
     src="./input/boneage-training-dataset/boneage-training-dataset/"+str(i[0])+".png"
-    dst="./train/"+str(i[1])+"/"+str(i[0])+".png"
+    dst="./train/"+str(int(i[1])/228)+"/"+str(i[0])+".png"
+    #dst="./train/"+str(int(i[1]))+"/"+str(i[0])+".png"
     copyfile(src, dst)
 print('Train terminado...')
 
 for i in test:
     src="./input/boneage-training-dataset/boneage-training-dataset/"+str(i[0])+".png"
-    dst="./test/"+str(i[1])+"/"+str(i[0])+".png"
+    dst="./test/"+str(int(i[1])/228)+"/"+str(i[0])+".png"
+    #dst="./test/"+str(int(i[1]))+"/"+str(i[0])+".png"
     copyfile(src, dst)
 print('TestMale terminado...')
