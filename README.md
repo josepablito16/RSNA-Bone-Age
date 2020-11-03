@@ -15,3 +15,11 @@
 │   │       ├── 10000.png
 │   │       ├── 10001.png
 ```
+
+# before running any script
+Download the neural network weights inceptionV3:
+```bash
+wget --no-check-certificate \
+    https://storage.googleapis.com/mledu-datasets/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5 \
+    -O /tmp/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5
+```
