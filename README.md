@@ -1,5 +1,8 @@
 # RSNA Bone Age
 
+If you are working locally, download the data:
+https://www.kaggle.com/kmader/rsna-bone-age?select=boneage-training-dataset.csv
+
 # file hierarchy
 
 ```bash
@@ -23,3 +26,6 @@ wget --no-check-certificate \
     https://storage.googleapis.com/mledu-datasets/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5 \
     -O /tmp/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5
 ```
+If you are part of UVG, download the model weights. Otherwise train the models again.
+
+https://drive.google.com/drive/folders/1eqAOPh8HmC3icYme-CO_VzGjllQ_vI1e?usp=sharing
