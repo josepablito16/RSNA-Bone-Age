@@ -46,3 +46,11 @@ $wc.DownloadFile($url, $outputDir)
 If you are part of UVG, download the model weights. Otherwise, train the models again.
 
 https://drive.google.com/drive/folders/1eqAOPh8HmC3icYme-CO_VzGjllQ_vI1e?usp=sharing
+
+## To develop the Dash application
+```bash
+pip3 install dash-bootstrap-components
+pip3 install dash
+python3 app.py
+
+```
