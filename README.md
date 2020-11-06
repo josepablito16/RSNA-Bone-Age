@@ -51,6 +51,7 @@ https://drive.google.com/drive/folders/1eqAOPh8HmC3icYme-CO_VzGjllQ_vI1e?usp=sha
 ```bash
 pip3 install dash-bootstrap-components
 pip3 install dash
+cd app
 python3 app.py
 
 ```
