@@ -15,6 +15,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+from modelos import predictModel1, loadImage
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -95,10 +96,10 @@ def parse_contents(contents, filename, date):
 
         # HTML images accept base64 encoded strings in the same format
         # that is supplied by the upload
-        html.Img(src=contents),
+        html.Img(src=contents, style={'height':'35%', 'width':'35%'}),
         html.Hr(),
-        html.Div('Raw Content'),
-        html.Pre(contents[0:200] + '...', style={
+        html.Div('Predicciones'),
+        html.Pre("Modelo 1: "+str(predictModel1(loadImage(contents))), style={
             'whiteSpace': 'pre-wrap',
             'wordBreak': 'break-all'
         })
