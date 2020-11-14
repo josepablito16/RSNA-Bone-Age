@@ -15,7 +15,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
-from modelos import predictModel1, loadImage
+from modelos import predictModel1, loadImage,predictModel2
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -98,8 +98,12 @@ def parse_contents(contents, filename, date):
         # that is supplied by the upload
         html.Img(src=contents, style={'height':'35%', 'width':'35%'}),
         html.Hr(),
-        html.Div('Predicciones'),
+        html.Div('Predicciones: '),
         html.Pre("Modelo 1: "+str(predictModel1(loadImage(contents))), style={
+            'whiteSpace': 'pre-wrap',
+            'wordBreak': 'break-all'
+        }),
+        html.Pre("Modelo 2: "+str(predictModel2(loadImage(contents))), style={
             'whiteSpace': 'pre-wrap',
             'wordBreak': 'break-all'
         })

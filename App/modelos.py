@@ -61,4 +61,34 @@ def predictModel1(images):
     return prediction[0][0]
 
 
+def predictModel2(images):
+    pre_trained_model = InceptionV3(input_shape = (150, 150, 3), 
+                                    include_top = False, 
+                                    weights = None)
+
+
+    for layer in pre_trained_model.layers:
+        layer.trainable = False
+
+    last_layer = pre_trained_model.get_layer('mixed7')
+    print('last layer output shape: ', last_layer.output_shape)
+    last_output = last_layer.output
+
+    # Flatten the output layer to 1 dimension
+    x = layers.Flatten()(last_output)
+    # Add a fully connected layer with 1,024 hidden units and ReLU activation
+    x = layers.Dense(1024, activation='relu')(x)
+    # Add a dropout rate of 0.2
+    x = layers.Dropout(0.2)(x)                  
+    # Add a final sigmoid layer for classification
+    x = layers.Dense  (228, activation='softmax')(x)           
+
+    model = Model( pre_trained_model.input, x) 
+
+    model.load_weights("../TrainModel3")
+    prediction=model.predict(images,batch_size=10)
+    return np.argmax(prediction[0])
+
+
+
 #print(predictModel1(loadImage(src)))
