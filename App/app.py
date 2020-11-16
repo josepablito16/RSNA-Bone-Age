@@ -15,6 +15,10 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+import csv
+import plotly.graph_objs as go
+import numpy as np
+import plotly.express as px
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -85,7 +89,80 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 
+###########################################Page No.1############################################################
 
+
+markdown_titel = " # Acerca del proyecto"
+markdown_text = '''
+Existen dos procesos biológicos íntimamente relacionados de un individuo los cuales no necesariamente van paralelos a lo largo de la infancia y adolescencia, estos dos procesos son el crecimiento y la maduración. Cada niño madura a distinta velocidad, es decir que la edad no es un buen indicativo para ello (Pérez, 2011). 
+
+La edad ósea (EO) es la mejor forma de expresar la edad biológica de una persona, y es de suma importancia en el campo de la medicina dado que muchos tratamientos y procedimientos deben ser cuidadosamente basados en la edad del individuo. Esto también permite evaluar la maduración ósea que, según medios, es "es un fenómeno biológico a través del cual los seres vivos incrementan su masa adquiriendo progresivamente una maduración morfológica y funcional" (Europapress, 2015).
+
+El principal problema se centra en que, a pesar de tener una radiografía presente y clara, no existe un proceso 100% automatizado que identifique la edad ósea de una persona. El procedimiento se centra siempre en el criterio de un experto y dado que es una tarea manual, existirá variabilidad interindividual. Esto abre lugar a resultados raramente precisos y expuestos a un porcentaje de error humano (Abad. D, 2011).
+
+Las computadoras y el uso de algoritmos complejos, junto con las aplicaciones de inteligencia artificial (como lo es machine learning y deep learning), han presentado resultados prontos y exactos. Esto da lugar a un aumento de eficiencia y confiabilidad en los resultados, por lo que obtener un modelo capaz de predecir la edad ósea de un individuo es sumamente conveniente.
+'''
+
+page1 = html.Div([
+    dcc.Markdown(
+        children=markdown_titel,
+        style={
+            'textAlign': 'justify',
+            'padding': '25px 50px 25px',
+        },
+    ),
+    dcc.Markdown(
+        children=markdown_text,
+        style={
+            'textAlign': 'justify',
+            'padding': '25px 50px 75px',
+        },
+    )
+])
+
+##################################################################################################################
+
+import pandas as pd 
+df = pd.read_csv('boneage-training-dataset.csv')
+print(df.head())
+print(df.groupby(['male']).size().reset_index(name='counts'))
+
+fig = px.bar(
+    df.groupby(['boneage']).size().reset_index(name='count')
+    , title ="Cantidad de imágenes por cantidad de meses"
+    , x = 'boneage'
+    , y = 'count'
+    ,labels = {"boneage": "Edad Ósea (meses)", "count": "Cantidad de imágenes"}
+    )
+
+fig2 = px.pie(
+    df.groupby(['male']).size().reset_index(name='count')
+    , values = 'count'
+    , title ="Cantidad de imágenes por género"
+    , width = 200
+    , names='male'
+    )
+
+page2 = html.Div([
+    dcc.Graph(
+            id='example-graph-1',
+            figure=fig
+        ),
+    dcc.Graph(
+            id='example-graph-2',
+            figure=fig2
+        )
+], #style={
+   #         'display': 'flex',
+   #         'flexDirection': 'row'
+   #     }
+)
+
+
+
+
+
+###################################################################################################################v
 def parse_contents(contents, filename, date):
     # print(contents)
 
@@ -131,9 +208,10 @@ def toggle_active_links(pathname):
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname in ["/", "/page-1"]:
-        return html.P("Contenido del menú inicial!")
+        return page1
+        #return html.P("Contenido del !")
     elif pathname == "/page-2":
-        return html.P("Contenido del analisis de datos")
+        return page2
     elif pathname == "/page-3":
         return imagePicker
         #return html.P("Contenido de la prediccion")
