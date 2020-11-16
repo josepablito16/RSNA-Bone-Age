@@ -104,6 +104,14 @@ El principal problema se centra en que, a pesar de tener una radiografía presen
 Las computadoras y el uso de algoritmos complejos, junto con las aplicaciones de inteligencia artificial (como lo es machine learning y deep learning), han presentado resultados prontos y exactos. Esto da lugar a un aumento de eficiencia y confiabilidad en los resultados, por lo que obtener un modelo capaz de predecir la edad ósea de un individuo es sumamente conveniente.
 '''
 
+markdown_biblio = '''
+* Pérez, R. (2011). Valoración y utilidad de la edad ósea en la práctica clínica. Extraído 05 de septiembre del 2020 de: https://fapap.es/articulo/180/valoracion-y-utilidad-de-la-edad-osea-en-la-practica-clinica
+* Europapress. (2015). Una App permite obtener la edad ósea del niño y su predicción de talla adulta. Extraído 6 de septiembre del 2020, de: https://www.europapress.es/economia/red-empresas-00953/noticia-app-permite-obtener-edad-osea-nino-prediccion-talla-adulta-20151214123040.html
+* Abad. D, L. J. (2011) Estimación automática de la edad ósea mediante procesado y segmentación de radiografías, Universidad Carlos III de Madrid. Disponible en: https://e-archivo.uc3m.es/bitstream/handle/10016/13728/PFC_DANIEL_ABAD.pdf?sequence=1&isAllowed=y.
+'''
+
+markdown_biblio_titel = " # Referencias"
+
 page1 = html.Div([
     dcc.Markdown(
         children=markdown_titel,
@@ -116,17 +124,35 @@ page1 = html.Div([
         children=markdown_text,
         style={
             'textAlign': 'justify',
+            'padding': '25px 50px 50px',
+            'fontSize': '14'
+        },
+    ),
+    dcc.Markdown(
+        children=markdown_biblio_titel,
+        style={
+            'textAlign': 'justify',
+            'padding': '25px 50px 25px',
+        },
+    ),
+    dcc.Markdown(
+        children=markdown_biblio,
+        style={
+            'textAlign': 'justify',
             'padding': '25px 50px 75px',
+            'fontSize': '14'
         },
     )
 ])
 
-##################################################################################################################
+#############################################Page No.2############################################################
 
 import pandas as pd 
 df = pd.read_csv('boneage-training-dataset.csv')
-print(df.head())
-print(df.groupby(['male']).size().reset_index(name='counts'))
+df2 = pd.read_csv('dataModelos.csv')
+#print(df2.head())
+#print(df2.loc[:,'predMod1'])
+#print(df.groupby(['male']).size().reset_index(name='counts'))
 
 fig = px.bar(
     df.groupby(['boneage']).size().reset_index(name='count')
@@ -140,24 +166,73 @@ fig2 = px.pie(
     df.groupby(['male']).size().reset_index(name='count')
     , values = 'count'
     , title ="Cantidad de imágenes por género"
-    , width = 200
     , names='male'
+    ,labels = {"male": "Género", "count": "Cantidad de imágenes"}
     )
+
+fig3 = go.Figure(data=[
+    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod1']),
+    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod1'])
+])
+fig3.update_xaxes(title_text="Número de iteración")
+fig3.update_yaxes(title_text="Edad Ósea (meses)")
+fig3.update_layout(title_text='Predicciones modelo #1')
+fig4 = go.Figure(data=[
+    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod2']),
+    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod2'])
+])
+fig4.update_xaxes(title_text="Número de iteración")
+fig4.update_yaxes(title_text="Edad Ósea (meses)")
+fig4.update_layout(title_text='Predicciones modelo #2')
+
+
+diffMod1 = df2['edadMod1'] - df2['predMod1']
+diffMod2 = df2['edadMod2'] - df2['predMod2']
+
+fig5 = go.Figure(data=[
+    go.Bar(name='Modelo #1', x=df2.loc[:,'Iteracion'], y=diffMod1),
+    go.Bar(name='Modelo #2', x=df2.loc[:,'Iteracion'], y=diffMod2)
+])
+fig5.update_xaxes(title_text="Número de iteración")
+fig5.update_yaxes(title_text="Diferencia en la Edad Ósea (meses)")
+fig5.update_layout(title_text='Comparación del Error Entre Modelos por Iteración')
+# Change the bar mode
+#fig.update_layout(barmode='group')
 
 page2 = html.Div([
     dcc.Graph(
             id='example-graph-1',
             figure=fig
         ),
-    dcc.Graph(
-            id='example-graph-2',
-            figure=fig2
-        )
-], #style={
-   #         'display': 'flex',
-   #         'flexDirection': 'row'
-   #     }
-)
+    html.Div([
+        dcc.Graph(
+                id='example-graph-2',
+                figure=fig2
+            ),
+        dcc.Graph(
+                id='example-graph-3',
+                figure=fig3
+            )
+    ], style={
+            'display': 'flex',
+            'flexDirection': 'row',
+            'width': '100%'
+        }),
+    html.Div([
+        dcc.Graph(
+                id='example-graph-4',
+                figure=fig4
+            ),
+        dcc.Graph(
+                id='example-graph-5',
+                figure=fig5
+            )
+    ], style={
+            'display': 'flex',
+            'flexDirection': 'row',
+            'width': '100%'
+        })
+])
 
 
 
