@@ -19,6 +19,7 @@ import csv
 import plotly.graph_objs as go
 import numpy as np
 import plotly.express as px
+from modelos import predictModel1, loadImage,predictModel2
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -172,10 +173,14 @@ def parse_contents(contents, filename, date):
 
         # HTML images accept base64 encoded strings in the same format
         # that is supplied by the upload
-        html.Img(src=contents),
+        html.Img(src=contents, style={'height':'35%', 'width':'35%'}),
         html.Hr(),
-        html.Div('Raw Content'),
-        html.Pre(contents[0:200] + '...', style={
+        html.Div('Predicciones: '),
+        html.Pre("Modelo 1: "+str(predictModel1(loadImage(contents))), style={
+            'whiteSpace': 'pre-wrap',
+            'wordBreak': 'break-all'
+        }),
+        html.Pre("Modelo 2: "+str(predictModel2(loadImage(contents))), style={
             'whiteSpace': 'pre-wrap',
             'wordBreak': 'break-all'
         })
