@@ -23,6 +23,8 @@ from modelos import predictModel1, loadImage,predictModel2
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+USER_SELECTION=['HOLA']
+
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
     "position": "fixed",
@@ -64,6 +66,16 @@ sidebar = html.Div(
 )
 
 imagePicker = html.Div([
+    html.Div('Seleccione los modelos que quiere utilizar para predecir:'),
+    dcc.Checklist(
+        id='checkListModel',
+        options=[
+            {'label': 'Modelo 1', 'value': 'M1'},
+            {'label': 'Modelo 2', 'value': 'M2'}
+        ],
+        value=['M1', 'M2'],
+        labelStyle={'display': 'block'}
+    ),
     dcc.Upload(
         id='upload-image',
         children=html.Div([
@@ -84,6 +96,7 @@ imagePicker = html.Div([
         multiple=True
     ),
     html.Div(id='output-image-upload'),
+    html.Div(id='output-selection'),
 ])
 
 content = html.Div(id="page-content", style=CONTENT_STYLE)
@@ -275,14 +288,22 @@ def show_hide_element(visibility_state):
         return {'display': 'none'}
 
 
+@app.callback(Output('output-selection', 'children'),
+              [Input('checkListModel', 'value')])
+def getUserSelection(selection):
+    print(selection)
+    global USER_SELECTION
+    print(USER_SELECTION)
+    USER_SELECTION=selection
+
+
 ###################################################################################################################v
 def parse_contents(contents, filename, date):
     # print(contents)
+    global USER_SELECTION
 
-    return html.Div([
-        # html.H5(filename),
-        # html.H6(datetime.datetime.fromtimestamp(date)),
-
+    if (len(USER_SELECTION)==2):
+        return html.Div([
         # HTML images accept base64 encoded strings in the same format
         # that is supplied by the upload
         html.Img(src=contents, style={'height':'35%', 'width':'35%'}),
@@ -297,6 +318,39 @@ def parse_contents(contents, filename, date):
             'wordBreak': 'break-all'
         })
     ])
+
+    try:
+        if (USER_SELECTION[0]=='M1'):
+            return html.Div([
+            # HTML images accept base64 encoded strings in the same format
+            # that is supplied by the upload
+            html.Img(src=contents, style={'height':'35%', 'width':'35%'}),
+            html.Hr(),
+            html.Div('Predicciones: '),
+            html.Pre("Modelo 1: "+str(predictModel1(loadImage(contents))), style={
+                'whiteSpace': 'pre-wrap',
+                'wordBreak': 'break-all'
+            })
+        ])
+
+        if (USER_SELECTION[0]=='M2'):
+            return html.Div([
+            # HTML images accept base64 encoded strings in the same format
+            # that is supplied by the upload
+            html.Img(src=contents, style={'height':'35%', 'width':'35%'}),
+            html.Hr(),
+            html.Div('Predicciones: '),
+            html.Pre("Modelo 2: "+str(predictModel2(loadImage(contents))), style={
+                'whiteSpace': 'pre-wrap',
+                'wordBreak': 'break-all'
+            })
+        ])
+    except:
+        return html.Div([
+        # HTML images accept base64 encoded strings in the same format
+        # that is supplied by the upload
+        html.Div('Seleccione que modelo quiere usar!')])
+        
 
 @app.callback(Output('output-image-upload', 'children'),
               [Input('upload-image', 'contents')],
