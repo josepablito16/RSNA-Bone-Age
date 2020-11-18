@@ -146,13 +146,9 @@ page1 = html.Div([
 ])
 
 #############################################Page No.2############################################################
-
 import pandas as pd 
 df = pd.read_csv('boneage-training-dataset.csv')
 df2 = pd.read_csv('dataModelos.csv')
-#print(df2.head())
-#print(df2.loc[:,'predMod1'])
-#print(df.groupby(['male']).size().reset_index(name='counts'))
 
 fig = px.bar(
     df.groupby(['boneage']).size().reset_index(name='count')
@@ -196,10 +192,18 @@ fig5 = go.Figure(data=[
 fig5.update_xaxes(title_text="Número de iteración")
 fig5.update_yaxes(title_text="Diferencia en la Edad Ósea (meses)")
 fig5.update_layout(title_text='Comparación del Error Entre Modelos por Iteración')
-# Change the bar mode
-#fig.update_layout(barmode='group')
+
 
 page2 = html.Div([
+    dcc.Dropdown(
+        id = 'dropdown-to-show_or_hide-element',
+        options=[
+            {'label': 'Modelo 1', 'value': 'one'},
+            {'label': 'Modelo 2', 'value': 'two'},
+            {'label': 'Ambos modelos', 'value': 'both'}
+        ],
+        value = 'one'
+    ),
     dcc.Graph(
             id='example-graph-1',
             figure=fig
@@ -209,33 +213,66 @@ page2 = html.Div([
                 id='example-graph-2',
                 figure=fig2
             ),
-        dcc.Graph(
-                id='example-graph-3',
-                figure=fig3
-            )
+        
+        #html.Div([
+        #    dcc.Graph(
+        #            id='element-to-hide1',
+        #            figure=fig3
+        #        )
+        #], style= {'display': 'block'} )
     ], style={
             'display': 'flex',
             'flexDirection': 'row',
             'width': '100%'
         }),
     html.Div([
-        dcc.Graph(
-                id='example-graph-4',
+        html.Div([
+            dcc.Graph(
+                id='element-to-hide2',
                 figure=fig4
-            ),
-        dcc.Graph(
-                id='example-graph-5',
+            )], style= {'display': 'block'} ),
+        html.Div([
+            dcc.Graph(
+                id='element-to-hide3',
                 figure=fig5
-            )
+            )], style= {'display': 'block'} )
     ], style={
             'display': 'flex',
             'flexDirection': 'row',
             'width': '100%'
-        })
+        }),
 ])
 
+@app.callback(
+   Output(component_id='element-to-hide1', component_property='style'),
+   [Input(component_id='dropdown-to-show_or_hide-element', component_property='value')])
 
 
+def show_hide_element(visibility_state):
+    if (visibility_state == 'one' or visibility_state == 'both'):
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
+
+@app.callback(
+   Output(component_id='element-to-hide2', component_property='style'),
+   [Input(component_id='dropdown-to-show_or_hide-element', component_property='value')])
+
+def show_hide_element(visibility_state):
+    if (visibility_state == 'two' or visibility_state == 'both'):
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
+
+@app.callback(
+   Output(component_id='element-to-hide3', component_property='style'),
+   [Input(component_id='dropdown-to-show_or_hide-element', component_property='value')])
+
+def show_hide_element(visibility_state):
+    if visibility_state == 'both':
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
 
 
 ###################################################################################################################v
