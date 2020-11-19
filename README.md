@@ -7,6 +7,13 @@ https://www.kaggle.com/kmader/rsna-bone-age?select=boneage-training-dataset.csv
 
 ```bash
 .
+├── TrainModel3.data-00000-of-00001
+├── TrainModel2.data-00000-of-00001
+├── checkpoint
+├── TrainModel3.index
+├── TrainModel2.index
+├── TrainModel1.data-00000-of-00001
+├── TrainModel1.index
 ├── input
 │   ├── boneage-test-dataset
 │   │   └── boneage-test-dataset
@@ -46,6 +53,8 @@ $wc.DownloadFile($url, $outputDir)
 If you are part of UVG, download the model weights. Otherwise, train the models again.
 
 https://drive.google.com/drive/folders/1eqAOPh8HmC3icYme-CO_VzGjllQ_vI1e?usp=sharing
+
+these files have to be in the repository root!
 
 ## To develop the Dash application
 ```bash
