@@ -168,7 +168,8 @@ fig = px.bar(
     , title ="Cantidad de imágenes por cantidad de meses"
     , x = 'boneage'
     , y = 'count'
-    ,labels = {"boneage": "Edad Ósea (meses)", "count": "Cantidad de imágenes"}
+    , labels = {"boneage": "Edad Ósea (meses)", "count": "Cantidad de imágenes"}
+    , color_discrete_sequence = ["#004B8F", "#DB8700"]
     )
 
 fig2 = px.pie(
@@ -177,37 +178,36 @@ fig2 = px.pie(
     , title ="Cantidad de imágenes por género"
     , names='male'
     , labels = {"male": "Género", "count": "Cantidad de imágenes"}
-    , color_discrete_map={'Masculino':'darkblue',
-                         'Femenino':'blue'}
+    , color_discrete_sequence = ["#004B8F", "#DB8700"]
 )
 
 fig3 = go.Figure(data=[
-    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod1'] , marker_color="darkblue" ),
-    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod1'], marker_color="blue"),
+    go.Bar(name='Predicción', x=df2.loc[1:,'Iteracion'], y=df2.loc[:,'predMod1'] , marker_color="#004B8F" ),
+    go.Bar(name='Valor real', x=df2.loc[1:,'Iteracion'], y=df2.loc[:,'edadMod1'], marker_color="#DB8700"),
 ])
 fig3.update_xaxes(title_text="Número de iteración")
 fig3.update_yaxes(title_text="Edad Ósea (meses)")
-fig3.update_layout(title_text='Predicciones modelo #1')
+fig3.update_layout(title_text='Predicciones modelo #1 (Iteración/ Predicción en meses)')
 
 fig4 = go.Figure(data=[
-    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod2'], marker_color="darkblue"),
-    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod2'], marker_color="blue")
+    go.Bar(name='Predicción', x=df2.loc[1:,'Iteracion'], y=df2.loc[:,'predMod2'],marker_color="#004B8F"),
+    go.Bar(name='Valor real', x=df2.loc[1:,'Iteracion'], y=df2.loc[:,'edadMod2'], marker_color="#DB8700")
 ])
 fig4.update_xaxes(title_text="Número de iteración")
 fig4.update_yaxes(title_text="Edad Ósea (meses)")
-fig4.update_layout(title_text='Predicciones modelo #2')
+fig4.update_layout(title_text='Predicciones modelo #2 (Iteración/ Predicción en meses)')
 
 
 diffMod1 = df2['edadMod1'] - df2['predMod1']
 diffMod2 = df2['edadMod2'] - df2['predMod2']
 
 fig5 = go.Figure(data=[
-    go.Bar(name='Modelo #1', x=df2.loc[:,'Iteracion'], y=diffMod1 , marker_color="darkblue"),
-    go.Bar(name='Modelo #2', x=df2.loc[:,'Iteracion'], y=diffMod2 , marker_color="blue")
+    go.Bar(name='Modelo #1', x=df2.loc[1:,'Iteracion'], y=diffMod1 , marker_color="#004B8F"),
+    go.Bar(name='Modelo #2', x=df2.loc[1:,'Iteracion'], y=diffMod2 , marker_color="#DB8700")
 ])
 fig5.update_xaxes(title_text="Número de iteración")
 fig5.update_yaxes(title_text="Diferencia en la Edad Ósea (meses)")
-fig5.update_layout(title_text='Comparación del Error Entre Modelos por Iteración')
+fig5.update_layout(title_text='Comparación del Error Entre Modelos por Iteración (Iteración/ Error en meses)')
 
 
 page2 = html.Div([
@@ -247,7 +247,7 @@ page2 = html.Div([
             )], style= {'display': 'block'} )
     ], style={
             'display': 'flex',
-            'flexDirection': 'row',
+            'flexDirection': 'column',
             'width': '100%',
             'flexWrap': 'wrap'
         }),
