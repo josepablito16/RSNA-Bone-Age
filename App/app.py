@@ -176,19 +176,22 @@ fig2 = px.pie(
     , values = 'count'
     , title ="Cantidad de imágenes por género"
     , names='male'
-    ,labels = {"male": "Género", "count": "Cantidad de imágenes"}
-    )
+    , labels = {"male": "Género", "count": "Cantidad de imágenes"}
+    , color_discrete_map={'Masculino':'darkblue',
+                         'Femenino':'blue'}
+)
 
 fig3 = go.Figure(data=[
-    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod1']),
-    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod1'])
+    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod1'] , marker_color="darkblue" ),
+    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod1'], marker_color="blue"),
 ])
 fig3.update_xaxes(title_text="Número de iteración")
 fig3.update_yaxes(title_text="Edad Ósea (meses)")
 fig3.update_layout(title_text='Predicciones modelo #1')
+
 fig4 = go.Figure(data=[
-    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod2']),
-    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod2'])
+    go.Bar(name='Predicción', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'predMod2'], marker_color="darkblue"),
+    go.Bar(name='Valor real', x=df2.loc[:,'Iteracion'], y=df2.loc[:,'edadMod2'], marker_color="blue")
 ])
 fig4.update_xaxes(title_text="Número de iteración")
 fig4.update_yaxes(title_text="Edad Ósea (meses)")
@@ -199,8 +202,8 @@ diffMod1 = df2['edadMod1'] - df2['predMod1']
 diffMod2 = df2['edadMod2'] - df2['predMod2']
 
 fig5 = go.Figure(data=[
-    go.Bar(name='Modelo #1', x=df2.loc[:,'Iteracion'], y=diffMod1),
-    go.Bar(name='Modelo #2', x=df2.loc[:,'Iteracion'], y=diffMod2)
+    go.Bar(name='Modelo #1', x=df2.loc[:,'Iteracion'], y=diffMod1 , marker_color="darkblue"),
+    go.Bar(name='Modelo #2', x=df2.loc[:,'Iteracion'], y=diffMod2 , marker_color="blue")
 ])
 fig5.update_xaxes(title_text="Número de iteración")
 fig5.update_yaxes(title_text="Diferencia en la Edad Ósea (meses)")
@@ -226,19 +229,12 @@ page2 = html.Div([
                 id='example-graph-2',
                 figure=fig2
             ),
-        
-        #html.Div([
-        #    dcc.Graph(
-        #            id='element-to-hide1',
-        #            figure=fig3
-        #        )
-        #], style= {'display': 'block'} )
-    ], style={
-            'display': 'flex',
-            'flexDirection': 'row',
-            'width': '100%'
-        }),
-    html.Div([
+        html.Div([
+            dcc.Graph(
+                    id='element-to-hide1',
+                    figure=fig3
+                )
+        ], style= {'display': 'block'} ),
         html.Div([
             dcc.Graph(
                 id='element-to-hide2',
@@ -252,7 +248,8 @@ page2 = html.Div([
     ], style={
             'display': 'flex',
             'flexDirection': 'row',
-            'width': '100%'
+            'width': '100%',
+            'flexWrap': 'wrap'
         }),
 ])
 
