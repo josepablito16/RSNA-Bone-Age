@@ -115,6 +115,8 @@ La edad ósea (EO) es la mejor forma de expresar la edad biológica de una perso
 El principal problema se centra en que, a pesar de tener una radiografía presente y clara, no existe un proceso 100% automatizado que identifique la edad ósea de una persona. El procedimiento se centra siempre en el criterio de un experto y dado que es una tarea manual, existirá variabilidad interindividual. Esto abre lugar a resultados raramente precisos y expuestos a un porcentaje de error humano (Abad. D, 2011).
 
 Las computadoras y el uso de algoritmos complejos, junto con las aplicaciones de inteligencia artificial (como lo es machine learning y deep learning), han presentado resultados prontos y exactos. Esto da lugar a un aumento de eficiencia y confiabilidad en los resultados, por lo que obtener un modelo capaz de predecir la edad ósea de un individuo es sumamente conveniente.
+
+A continuación se presentan implementaciones de modelos V3 de redes neuronales convolucionales , tratando el problema desde un efoque de regresión (Modelo No.1) y un enfoque de clasificación (Modelo No.2). 
 '''
 
 markdown_biblio = '''
