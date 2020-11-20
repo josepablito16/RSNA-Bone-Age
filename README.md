@@ -58,9 +58,7 @@ these files have to be in the repository root!
 
 ## To develop the Dash application
 ```bash
-pip3 install dash-bootstrap-components
-pip3 install dash
+pip3 install -R requirements.txt
 cd app
 python3 app.py
-
 ```
